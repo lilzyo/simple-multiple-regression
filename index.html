@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Expenditure Predictor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .food-icons {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .food-icon {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.15;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+            }
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 600px;
+            padding: 40px;
+            position: relative;
+            z-index: 10;
+            backdrop-filter: blur(5px);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #ff6b6b, #ffa502);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .calculator {
+            margin: 30px 0;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #555;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        label i {
+            margin-right: 10px;
+            color: #ff6b6b;
+        }
+        
+        .input-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            outline: none;
+        }
+        
+        input:focus {
+            border-color: #ff6b6b;
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.2);
+        }
+        
+        .value-display {
+            min-width: 50px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #ff6b6b;
+        }
+        
+        button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(to right, #ff6b6b, #ffa502);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.6);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(to right, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.5s;
+            border-left: 5px solid #ff6b6b;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .result h2 {
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        
+        .prediction-value {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #ff6b6b;
+            margin: 15px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .input-values {
+            color: #666;
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+        
+        .tips {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 241, 230, 0.7);
+            border-radius: 15px;
+        }
+        
+        .tips h3 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tips ul {
+            padding-left: 25px;
+        }
+        
+        .tips li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #888;
+            font-size: 0.9rem;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .prediction-value {
+                font-size: 2.8rem;
+            }
+            
+            .input-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated food icons in background -->
+    <div class="food-icons" id="food-icons"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-utensils"></i>
+            </div>
+            <h1>Food Expenditure Predictor</h1>
+            <p class="subtitle">Calculate your weekly food costs based on family size and income</p>
+        </header>
+        
+        <div class="calculator">
+            <div class="input-group">
+                <label for="income">
+                    <i class="fas fa-money-bill-wave"></i>
+                    Weekly Family Income ($)
+                </label>
+                <div class="input-container">
+                    <input type="number" id="income" placeholder="Enter family income" value="50">
+                    <div class="value-display" id="income-value">$50</div>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="family-size">
+                    <i class="fas fa-users"></i>
+                    Family Size
+                </label>
+                <div class="input-container">
+                    <input type="number" id="family-size" placeholder="Enter family size" value="3">
+                    <div class="value-display" id="family-value">3</div>
+                </div>
+            </div>
+            
+            <button id="predict-btn">
+                <i class="fas fa-calculator"></i>
+                Calculate Food Expenditure
+            </button>
+            
+            <div class="result" id="result">
+                <h2>Predicted Weekly Food Expenditure</h2>
+                <div class="prediction-value" id="prediction-value">$9.16</div>
+                <p class="input-values">Based on income of $50 and family size of 3</p>
+            </div>
+        </div>
+        
+        <div class="tips">
+            <h3>
+                <i class="fas fa-lightbulb"></i>
+                Money Saving Tips
+            </h3>
+            <ul>
+                <li>Plan your meals for the week ahead to reduce impulse purchases</li>
+                <li>Buy seasonal produce for better prices and freshness</li>
+                <li>Use leftovers creatively to minimize food waste</li>
+                <li>Compare unit prices to find the best value for money</li>
+                <li>Consider store brands which often offer similar quality at lower prices</li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p>© 2023 Food Expenditure Predictor | Based on multiple linear regression model</p>
+            <p>Model: Predicted Food Expenditure ($) = -1.118 + 0.1482 × Income + 0.7933 × Family Size</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Create floating food icons
+        function createFoodIcons() {
+            const container = document.getElementById('food-icons');
+            const icons = [
+                'fa-apple-alt', 'fa-bread-slice', 'fa-cheese', 'fa-carrot', 
+                'fa-drumstick-bite', 'fa-egg', 'fa-fish', 'fa-ice-cream',
+                'fa-lemon', 'fa-pepper-hot', 'fa-pizza-slice', 'fa-stroopwafel'
+            ];
+            
+            for (let i = 0; i < 40; i++) {
+                const icon = document.createElement('i');
+                icon.className = `food-icon fas ${icons[Math.floor(Math.random() * icons.length)]}`;
+                
+                // Random position and size
+                icon.style.left = `${Math.random() * 100}%`;
+                icon.style.top = `${Math.random() * 100}%`;
+                icon.style.fontSize = `${Math.random() * 2 + 1}rem`;
+                icon.style.animationDuration = `${Math.random() * 20 + 10}s`;
+                
+                container.appendChild(icon);
+            }
+        }
+        
+        // Initialize DOM elements
+        const incomeInput = document.getElementById('income');
+        const incomeValue = document.getElementById('income-value');
+        const familyInput = document.getElementById('family-size');
+        const familyValue = document.getElementById('family-value');
+        const predictBtn = document.getElementById('predict-btn');
+        const predictionValue = document.getElementById('prediction-value');
+        const resultContainer = document.getElementById('result');
+        
+        // Initialize display values
+        updateIncomeDisplay();
+        updateFamilyDisplay();
+        
+        // Event Listeners
+        incomeInput.addEventListener('input', function() {
+            updateIncomeDisplay();
+            calculatePrediction();
+        });
+        
+        familyInput.addEventListener('input', function() {
+            updateFamilyDisplay();
+            calculatePrediction();
+        });
+        
+        predictBtn.addEventListener('click', calculatePrediction);
+        
+        // Update display functions
+        function updateIncomeDisplay() {
+            incomeValue.textContent = `$${incomeInput.value || '0'}`;
+        }
+        
+        function updateFamilyDisplay() {
+            familyValue.textContent = familyInput.value || '0';
+        }
+        
+        // Prediction function
+        function calculatePrediction() {
+            const income = parseFloat(incomeInput.value) || 0;
+            const familySize = parseInt(familyInput.value) || 0;
+            
+            // Regression formula: -1.118 + 0.1482 * income + 0.7933 * familySize
+            const prediction = -1.118 + (0.1482 * income) + (0.7933 * familySize);
+            
+            // Ensure prediction is not negative
+            const finalPrediction = prediction < 0 ? 0 : prediction;
+            
+            // Update UI
+            predictionValue.textContent = `$${finalPrediction.toFixed(2)}`;
+            resultContainer.querySelector('.input-values').textContent = 
+                `Based on income of $${income} and family size of ${familySize}`;
+            
+            // Add animation effect
+            resultContainer.style.transform = 'scale(1.03)';
+            setTimeout(() => {
+                resultContainer.style.transform = 'scale(1)';
+            }, 300);
+        }
+        
+        // Initialize with a prediction and create icons
+        calculatePrediction();
+        createFoodIcons();
+        
+        // Add a few floating icons initially
+        for (let i = 0; i < 20; i++) {
+            setTimeout(createFoodIcons, i * 300);
+        }
+    </script>
+</body>
+</html>
